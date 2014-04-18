@@ -1,0 +1,20 @@
+{
+  "name": "quizz-phptour",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "quizz": "git@github.com:Ninja-Squad/quizz.git",
+    "angular-animate": "git://github.com/angular/bower-angular-animate.git#1.2.10",
+    "angular-mocks": "git://github.com/angular/bower-angular-mocks.git#1.2.10",
+    "showdown": "git://github.com/coreyti/showdown.git#~0.3.1",
+    "underscore": "1.6.0"
+  }
+}

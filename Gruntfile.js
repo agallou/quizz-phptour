@@ -93,6 +93,16 @@ module.exports = function(grunt) {
                 base: 'dist'
             },
             src: ['**']
+        },
+
+        watch: {
+            scripts: {
+                files: [ 'Gruntfile.js', 'src/**'],
+                tasks: ['default'],
+                options: {
+                    reload: true
+                }
+            }
         }
 
     });
@@ -106,6 +116,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-gh-pages');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
+    grunt.loadNpmTasks('grunt-contrib-watch');
 
     grunt.registerTask('default', ['clean', 'bower', 'html2js', 'shell:getSessions', 'concat', 'uglify', 'cssmin', 'htmlmin']);
     grunt.registerTask('push', ['default', 'gh-pages']);

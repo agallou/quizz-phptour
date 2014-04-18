@@ -4,14 +4,6 @@ module.exports = function(grunt) {
 
         clean: ["tmp/", 'dist/'],
 
-        copy: {
-            main: {
-                files: [
-                    {src: 'src/index.html', dest: 'dist/index.html'}
-                ]
-            }
-        },
-
         bower: {
             install: {
                 options: {
@@ -84,6 +76,18 @@ module.exports = function(grunt) {
             }
         },
 
+        htmlmin: {
+            dist: {
+                options: {
+                    removeComments: true,
+                    collapseWhitespace: true
+                },
+                files: {
+                    'dist/index.html': 'src/index.html'
+                }
+            }
+        },
+
         'gh-pages': {
             options: {
                 base: 'dist'
@@ -96,7 +100,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-bower-task');
     grunt.loadNpmTasks('grunt-html2js');
-    grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-clean');
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -104,7 +107,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-gh-pages');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
 
-    grunt.registerTask('default', ['clean', 'bower', 'html2js', 'shell:getSessions', 'concat', 'copy', 'uglify', 'cssmin']);
+    grunt.registerTask('default', ['clean', 'bower', 'html2js', 'shell:getSessions', 'concat', 'uglify', 'cssmin', 'htmlmin']);
     grunt.registerTask('push', ['default', 'gh-pages']);
 
 };

@@ -82,6 +82,13 @@ module.exports = function(grunt) {
                     'dist/main.css': 'bower_components/quizz/src/css/quizz.css'
                 }
             }
+        },
+
+        'gh-pages': {
+            options: {
+                base: 'dist'
+            },
+            src: ['**']
         }
 
     });
@@ -94,8 +101,10 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-shell');
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
+    grunt.loadNpmTasks('grunt-gh-pages');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
 
     grunt.registerTask('default', ['clean', 'bower', 'html2js', 'shell:getSessions', 'concat', 'copy', 'uglify', 'cssmin']);
+    grunt.registerTask('push', ['default', 'gh-pages']);
 
 };

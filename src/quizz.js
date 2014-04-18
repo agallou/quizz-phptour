@@ -4,7 +4,7 @@ var nbPropositions = 4;
 var questions = [];
 
 var currentConfs = _.shuffle(confs);
-currentConfs = currentConfs.slice(0,nbQuestions-1);
+currentConfs = currentConfs.slice(0,nbQuestions);
 
 _.each(currentConfs, function(conf) {
     var currentNames = _.shuffle(names);

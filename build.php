@@ -18,6 +18,8 @@ $crawler->filter('.deroulements .deroulement')->each(function ($node) use (&$spe
         $href = array_shift($attributes);
         $link = 'http://www.afup.org/pages/phptourlyon2014/' . $href;
 
+        $speaker = rtrim($speaker, '- ');
+
         $speakers[] = htmlentities($speaker);
         $sessions[] = array(
             'text' => htmlentities($session),

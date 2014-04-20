@@ -1,5 +1,15 @@
 {
+    "autoload": {
+        "psr-0": { "" : "src/" }
+    },
     "require": {
-        "fabpot/goutte": "1.0.5"
+        "fabpot/goutte": "1.0.5",
+        "symfony/console": "2.4.2",
+        "twig/twig": "1.15.1",
+        "monolog/monolog": "1.8.0",
+        "symfony/monolog-bridge": "2.4.2",
+        "symfony/dependency-injection": "2.4.3",
+        "symfony/filesystem": "2.4.3",
+        "symfony/config": "2.4.3"
     }
 }

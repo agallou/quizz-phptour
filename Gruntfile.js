@@ -27,11 +27,17 @@ module.exports = function(grunt) {
         },
 
         shell: {
+            options: {
+                stdout: true
+            },
             getSessions: {
-                options: {
-                    stdout: true
-                },
-                command: 'php build.php > tmp/variables.js'
+                command: 'php bin/app build:variables tmp/variables.js'
+            },
+            indexDev: {
+                command: 'php bin/app build:index dist/index.html'
+            },
+            indexProd: {
+                command: 'php bin/app build:index --prod dist/index.html'
             }
         },
 
@@ -54,7 +60,7 @@ module.exports = function(grunt) {
 
                     'tmp/templates-quizz.js',
 
-                    'src/quizz.js'
+                    'ressources/assets/js/quizz.js'
                 ],
                 dest: 'dist/main.js'
             }
@@ -83,7 +89,7 @@ module.exports = function(grunt) {
                     collapseWhitespace: true
                 },
                 files: {
-                    'dist/index.html': 'src/index.html'
+                    'dist/index.html': 'dist/index.html'
                 }
             }
         },
@@ -97,7 +103,7 @@ module.exports = function(grunt) {
 
         watch: {
             scripts: {
-                files: [ 'Gruntfile.js', 'src/**'],
+                files: [ 'Gruntfile.js', 'ressources/assets/js/**'],
                 tasks: ['default'],
                 options: {
                     reload: true
@@ -118,7 +124,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
-    grunt.registerTask('default', ['clean', 'bower', 'html2js', 'shell:getSessions', 'concat', 'uglify', 'cssmin', 'htmlmin']);
-    grunt.registerTask('push', ['default', 'gh-pages']);
+    grunt.registerTask('base', ['bower', 'html2js', 'shell:getSessions', 'concat', 'uglify', 'cssmin', 'htmlmin']);
+
+    grunt.registerTask('dev', ['clean', 'shell:indexDev', 'base']);
+    grunt.registerTask('prod', ['clean', 'shell:indexProd', 'base']);
+
+    grunt.registerTask('default', ['dev']);
+    grunt.registerTask('push', ['prod', 'gh-pages']);
 
 };

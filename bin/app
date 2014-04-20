@@ -1,0 +1,29 @@
+#!/usr/bin/env php
+<?php
+
+include __DIR__ . "/../vendor/autoload.php";
+
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+
+
+$rootDir = __DIR__ . '/../';
+
+$application = new Application();
+
+$container = new ContainerBuilder();
+$container->setParameter('root_dir', $rootDir);
+
+$servicesLoader = new XmlFileLoader($container, new FileLocator($rootDir . '/ressources/services'));
+$servicesLoader->load('templating.xml');
+$servicesLoader->load('command.xml');
+
+$application->getDefinition()->addOption(new InputOption('env', null, InputOption::VALUE_REQUIRED));
+
+$application->add($container->get('build_index_command'));
+$application->add($container->get('build_variables_command'));
+$application->run();

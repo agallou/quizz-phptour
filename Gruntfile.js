@@ -123,11 +123,12 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-gh-pages');
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-copy');
 
     grunt.registerTask('base', ['bower', 'html2js', 'shell:getSessions', 'concat', 'uglify', 'cssmin', 'htmlmin']);
 
     grunt.registerTask('dev', ['clean', 'shell:indexDev', 'base']);
-    grunt.registerTask('prod', ['clean', 'shell:indexProd', 'base']);
+    grunt.registerTask('prod', ['clean', 'shell:indexProd', 'base', 'copy:ghpage']);
 
     grunt.registerTask('default', ['dev']);
     grunt.registerTask('push', ['prod', 'gh-pages']);

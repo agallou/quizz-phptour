@@ -12,6 +12,19 @@ module.exports = function(grunt) {
             }
         },
 
+        copy: {
+          images: {
+            files: [
+              {expand: true, flatten: true, src: ['ressources/assets/images/logo.png'], dest: 'dist/'}
+            ]
+          },
+          ghpage: {
+            files: [
+              {expand: true, flatten: true, src: ['static/CNAME'], dest: 'dist/'}
+            ]
+          }
+        },
+
         html2js: {
             templates: {
                 options: {
@@ -125,7 +138,7 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-copy');
 
-    grunt.registerTask('base', ['bower', 'html2js', 'shell:getSessions', 'concat', 'uglify', 'cssmin', 'htmlmin']);
+    grunt.registerTask('base', ['bower', 'html2js', 'shell:getSessions', 'concat', 'uglify', 'cssmin', 'htmlmin', 'copy:images']);
 
     grunt.registerTask('dev', ['clean', 'shell:indexDev', 'base']);
     grunt.registerTask('prod', ['clean', 'shell:indexProd', 'base', 'copy:ghpage']);

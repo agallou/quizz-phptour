@@ -21,8 +21,11 @@
     </head>
 
     <body>
+        <div style="text-align:center">
+          <img src="logo.png" />
+        </div>
         <div class="container" ng-controller="QuizzCtrl" ng-init="initWithConstant('quizz')">
-            <div ng-include="'templates/Quizz.html'" ></div>
+          <div ng-include="'templates/Quizz.html'" ></div>
         </div>
         <script src="main.js"></script>
     </body>

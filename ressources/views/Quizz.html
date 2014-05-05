@@ -1,0 +1,136 @@
+<div class="quizz-intro jumbotron" ng-show="!started">
+    <h1>{{ quizz.title }}</h1>
+    <p btf-markdown="quizz.description"></p>
+    <button class="btn btn-primary btn-large quizz-start-button" ng-click="start()">Start</button>
+</div>
+
+<div class="quizz-question" ng-show="started && !finished">
+    <div class="row">
+        <div class="col-md-2 col-sd-12 row text-center">
+            <h1 class="col-md-12 col-xs-6">{{ questionIndex() + 1 }} / {{ quizz.questions.length }}</h1>
+            <div class="col-md-12 col-xs-6">
+                <div class="quizz-question-sign-container">
+                    <div class="quizz-question-sign-{{ questionOddity() }}">
+                        <span class="glyphicon glyphicon-question-sign"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <h4 class="well" btf-markdown="currentQuestion.text"></h4>
+            <form role="form" class="well">
+                <div class="form-group" ng-show="currentQuestion.type == 'radio'">
+                    <label class="radio" ng-repeat="answer in currentQuestion.answers">
+                        <input type="radio" ng-model="currentQuestion.selectedAnswer" ng-value="answer"/>
+                        <span btf-markdown="answer.text"></span>
+                    </label>
+                </div>
+                <div class="form-group" ng-show="currentQuestion.type == 'checkbox'">
+                    <label class="checkbox" ng-repeat="answer in currentQuestion.answers">
+                        <input type="checkbox" ng-model="answer.checked"/>
+                        <span btf-markdown="answer.text"></span>
+                    </label>
+                </div>
+                <div class="form-group" ng-show="currentQuestion.type == 'free'">
+                    <input type="text" ng-model="currentQuestion.typedAnswer" placeholder="Your answer" class="form-control"/>
+                </div>
+            </form>
+
+            <div class="progress progress-striped">
+                <div class="progress-bar progress-bar-info" role="progressbar" style="width: {{ questionIndex() * 100 / quizz.questions.length }}%;"></div>
+            </div>
+
+            <ul class="pager">
+                <li class="previous" ng-show="showPrevious()" ng-click="previous()">
+                    <a class="quizz-previous-button" href="">&larr; Previous</a>
+                </li>
+                <li class="next" ng-show="showNext()" ng-click="next()">
+                    <a class="quizz-next-button" href="">Next &rarr;</a>
+                </li>
+                <li class="next" ng-show="!hasNext()" ng-click="finish()">
+                    <a class="quizz-finish-button" href="">Finish &rarr;</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="quizz-result" ng-show="finished">
+    <h1 style="display:inline-block">Your score: {{ (getScore() * 100 / quizz.questions.length) | number:0}} % ({{ getScore() }} / {{ quizz.questions.length }})</h1>
+
+     <iframe allowtransparency="true" frameborder="0" scrolling="no"
+        src="https://platform.twitter.com/widgets/tweet_button.html?text=Je viens de finir le Quizz PHPTour %3A http%3A%2F%2Fquizz.phptour.org"
+        style="width:130px; height:20px;display:inline-block"></iframe>
+
+    <ul class="nav nav-pills">
+        <li ng-class="{active: resultFilter == allResultFilter}">
+            <a href="" ng-click="resultFilter = allResultFilter">All</a>
+        </li>
+        <li ng-class="{active: resultFilter == errorsOnlyResultFilter}">
+            <a href="" ng-click="resultFilter = errorsOnlyResultFilter">Errors only</a>
+        </li>
+    </ul>
+
+    <hr/>
+
+    <div ng-repeat="question in quizz.questions | filter:resultFilter" class="quizz-result-question">
+
+       <div class="row">
+            <div class="col-xs-2 text-center">
+                <span class="glyphicon glyphicon-ok-circle quizz-correct" ng-show="isAnswerCorrect(question)"></span>
+                <span class="glyphicon glyphicon-remove-circle quizz-incorrect" ng-show="!isAnswerCorrect(question)"></span>
+            </div>
+            <div class="col-xs-10">
+                <div class="well" btf-markdown="question.text"></div>
+                <table class="table" ng-show="['radio', 'checkbox'].indexOf(question.type) >= 0">
+                    <thead>
+                    <tr>
+                        <th class="quizz-tick">Yours</th>
+                        <th class="quizz-tick">Correct</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="answer in question.answers">
+                        <td class="quizz-tick">
+                            <span class="glyphicon glyphicon-ok" ng-show="isAnswerSelected(question, answer) && answer.correct"></span>
+                            <span class="glyphicon glyphicon-remove" ng-show="isAnswerSelected(question, answer) && !answer.correct"></span>
+                        </td>
+                        <td class="quizz-tick">
+                            <span class="glyphicon glyphicon-ok" ng-show="answer.correct"></span>
+                        </td>
+                        <td btf-markdown="answer.text"></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div ng-show="question.type == 'free'">
+                    <div class="row">
+                        <div class="col-xs-2">
+                            <strong>Yours:</strong>
+                        </div>
+                        <div class="col-xs-10 quizz-free-yours">
+                            <span class="glyphicon glyphicon-ok" ng-show="isAnswerCorrect(question)"> </span>
+                            <span class="glyphicon glyphicon-remove" ng-show="!isAnswerCorrect(question)"> </span>
+                            {{ question.typedAnswer }}
+                        </div>
+                    </div>
+                    <div class="row quizz-free-correct">
+                        <div class="col-xs-2"><strong>Correct:</strong></div>
+                        <div class="col-xs-10">
+                            <ul class="unstyled" ng-show="question.answers.length > 1">
+                                <li ng-repeat="answer in question.answers"><span class="glyphicon glyphicon-ok"></span> {{ answer }}</li>
+                            </ul>
+                            <div ng-show="question.answers.length == 1"><span class="glyphicon glyphicon-ok"></span> {{ question.answers[0] }}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="quizz-explanation" ng-show="question.explanation">
+                    <h2>Explanation</h2>
+                    <div btf-markdown="question.explanation"></div>
+                </div>
+            </div>
+        </div>
+
+        <hr/>
+    </div>
+</div>

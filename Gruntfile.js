@@ -34,7 +34,7 @@ module.exports = function(grunt) {
                     }
 
                 },
-                src: ['bower_components/quizz/src/templates/*.html'],
+                src: ['ressources/views/Quizz.html'],
                 dest: 'tmp/templates-quizz.js'
             }
         },

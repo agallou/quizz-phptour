@@ -4,6 +4,7 @@
     <head>
         <title>Quizz PHPTour</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
         <link href="http://netdna.bootstrapcdn.com/twitter-bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
         <link href="main.css" rel="stylesheet">
         {% if ga_enabled %}
@@ -22,7 +23,7 @@
 
     <body>
         <div style="text-align:center">
-          <a href="http://phptour.org"><img src="logo.png" /></a>
+          <a href="http://event.afup.org"><img src="logo.png" /></a>
         </div>
         <div class="container" ng-controller="QuizzCtrl" ng-init="initWithConstant('quizz')">
           <div ng-include="'templates/Quizz.html'" ></div>

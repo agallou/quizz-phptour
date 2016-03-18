@@ -52,25 +52,21 @@ class BuildVariablesCommand extends BaseCommand
 
         $client = new Client();
 
-        $crawler = $client->request('GET', 'http://www.afup.org/pages/phptourlyon2014/deroulement.php');
+        $crawler = $client->request('GET', 'http://event.afup.org/php-tour-2016/programme/');
 
         $speakers = array();
         $sessions = array();
 
-        $crawler->filter('.deroulements .deroulement')->each(function ($node) use (&$speakers, &$sessions) {
-                $speaker =  $node->filter('.conferenciers')->first()->text();
-                $session = $node->filter('.session')->first()->text() . "\n";
-                $attributes = $node->filter('.session a')->first()->extract('href');
-                $href = array_shift($attributes);
-                $link = 'http://www.afup.org/pages/phptourlyon2014/' . $href;
+        $crawler->filter('.sessions .session')->each(function ($node) use (&$speakers, &$sessions) {
+                $speaker =  trim($node->filter('.conferencier')->first()->text());
+                $session = $node->filter('h4')->first()->text() . "\n";
+                $name = $node->filter('a[name]')->attr('name');
+                $link = 'http://event.afup.org/php-tour-2016/programme/#' . $name;
 
-                $speaker = str_replace('<br>', ' ; ', $node->filter('.conferenciers')->html());
-                $speaker = rtrim($speaker, '- ');
-
-                $speakers[] = htmlentities($speaker);
+                $speakers[] = $speaker;
                 $sessions[] = array(
                     'text' => htmlentities($session),
-                    'name' => htmlentities($speaker),
+                    'name' => $speaker,
                     'link' => $link,
                 );
             });
